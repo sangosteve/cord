@@ -1,0 +1,90 @@
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {TopTabMenu} from '../TopTabNavigators.js/TopTabNavigators';
+import MessageStackNavigator from '../StackNavigators/MessageStackNavigator';
+import HomeScreen from '../../screens/HomeScreen';
+import ProfileScreen from '../../screens/ProfileScreen';
+import SettingsScreen from '../../screens/SettingsScreen';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+const Tab = createBottomTabNavigator();
+
+export default MainNavigation = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={MessageStackNavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Ionicon name="chatbox" size={28} />
+            ) : (
+              <Ionicon name="chatbox-outline" size={28} />
+            ),
+          tabBarLabelStyle: {fontSize: 16, fontWeight: '500'},
+          tabBarShowLabel: false,
+          headerStyle: {
+            backgroundColor: '#2CB9B0',
+            height: 100,
+          },
+        }}
+        // options={{
+        //   tabBarIcon: ({focused}) =>
+        //     focused ? (
+        //       <Ionicon name="chatbox" size={28} />
+        //     ) : (
+        //       <Ionicon name="chatbox-outline" size={28} />
+        //     ),
+        //   tabBarLabelStyle: {fontSize: 16, fontWeight: '500'},
+        //   tabBarShowLabel: false,
+        //   headerStyle: {
+        //     backgroundColor: '#2CB9B0',
+        //     height: 100,
+        //   },
+        //   headerRight: () => (
+        //     <View
+        //       style={{
+        //         flexDirection: 'row',
+        //         justifyContent: 'space-between',
+        //         width: 70,
+        //         marginRight: 20,
+        //       }}>
+        //       <Ionicon name="person-add" size={28} color="#fff" />
+        //       <Ionicon name="search-outline" size={28} color="#fff" />
+        //     </View>
+        //   ),
+        // }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Ionicon name="person" size={28} />
+            ) : (
+              <Ionicon name="person-outline" size={28} />
+            ),
+          tabBarLabelStyle: {fontSize: 14, fontWeight: '500'},
+          tabBarShowLabel: false,
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Ionicon name="settings" size={28} />
+            ) : (
+              <Ionicon name="settings-outline" size={28} />
+            ),
+          tabBarLabelStyle: {fontSize: 14, fontWeight: '500'},
+          tabBarShowLabel: false,
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
