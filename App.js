@@ -19,13 +19,19 @@ import {
 } from 'react-native';
 
 import Router from './app/navigation/Router';
+import {AuthProvider} from './app/contexts/AuthProvider';
+import PhoneSignIn from './PhoneSignIn';
+import AuthStack from './app/navigation/StackNavigators/AuthStack';
 
 const App = () => {
   return (
-    <>
-      <StatusBar backgroundColor="#2CB9B0" />
+    // <PhoneSignIn />
+    // <>
+    //   <StatusBar backgroundColor="#2CB9B0" />
+    <AuthProvider>
       <Router />
-    </>
+    </AuthProvider>
+    // </>
   );
 };
 
