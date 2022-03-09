@@ -13,6 +13,11 @@ const DMScreen = () => {
         text: 'Hello developer',
         createdAt: new Date(),
         image: 'https://placeimg.com/140/140/any',
+        sent: true,
+        location: {
+          latitude: 37.78825,
+          longitude: -122.4324,
+        },
         user: {
           _id: 2,
           name: 'React Native',

@@ -1,12 +1,25 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import PhoneInput from 'react-native-phone-number-input';
+import CountryPicker from '../components/CountryPicker/CountryPicker';
+import {CountryCodes} from '../constants/CountryCodes';
+import countries from '../constants/countries.json';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 const LoginScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState('');
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDialCode, setSelectedDialCode] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber) {
     const confirmation = await auth().signInWithPhoneNumber('+1 650-555-3434');
@@ -26,19 +39,52 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.logo}></View>
 
       <Text style={styles.header}>Enter your phone number</Text>
+      <CountryPicker
+        CountryCodes={countries}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        selectedDialCode={selectedDialCode}
+        setSelectedDialCode={setSelectedDialCode}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
       <View style={styles.formWrapper}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={{
+            backgroundColor: '#fff',
+            padding: 12,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Image
+            source={{
+              uri: selectedCountry ? selectedCountry.flag : countries[0]?.flag,
+            }}
+            style={{width: 50, height: 30}}
+          />
+          <Ionicon name="caret-down" size={26} style={{marginLeft: 7}} />
+
+          <Text style={{fontSize: 22}}>{`+${
+            selectedCountry
+              ? selectedCountry.callingCode
+              : countries[0]?.callingCode
+          }`}</Text>
+        </TouchableOpacity>
         <TextInput
           style={styles.inputText}
           onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+          placeholder="Phone Number"
+          keyboardType="phone-pad"
         />
-
-        <TouchableOpacity
-          // disabled={confirm ? false : true}
-          style={styles.btn}
-          onPress={() => signInWithPhoneNumber(phoneNumber)}>
-          <Text style={styles.btnText}>Continue</Text>
-        </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        // disabled={confirm ? false : true}
+        style={styles.btn}
+        onPress={() => signInWithPhoneNumber(phoneNumber)}>
+        <Text style={styles.btnText}>Continue</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -51,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#dadada',
-    padding: 20,
+    padding: 25,
   },
   logo: {
     width: 170,
@@ -67,13 +113,15 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputText: {
-    padding: 10,
+    padding: 12,
     backgroundColor: '#fff',
-    borderRadius: 25,
-    marginTop: 25,
     fontSize: 22,
+    width: '65%',
   },
   btn: {
     width: '100%',
